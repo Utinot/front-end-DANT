@@ -16,7 +16,7 @@ const Homecan = (props: Props) => {
 
         }
         getCandidate();
-    })
+    }, [])
     return (
         <div>
             <div>
