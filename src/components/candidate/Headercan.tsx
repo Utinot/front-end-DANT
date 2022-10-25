@@ -5,6 +5,7 @@ import { Categories } from '../../types/candidate'
 import { Skill } from '../../types/skill'
 import Logo from '../../assets/images/logo.jpg'
 import { isAuthenticate, logout } from '../../api/auth'
+import Select from 'react-select';
 
 type Props = {}
 
@@ -17,10 +18,25 @@ const Headercan = (props: Props) => {
       setCandidate(data)
     }
     getCandidate();
-    // const getUser = async () =>{
-    //   const {data} =
-    // }
   }, [])
+
+  const skillOptions = candidate?.skill.map((skill: Skill, index: number) => {
+    return {
+      key: index,
+      label: skill.name,
+      value: skill.id
+    }
+  })
+
+  const locationOptions = candidate?.location.map((location: any, index: number) => {
+    return {
+      key: index,
+      label: location.name,
+      value: location.id
+    }
+  })
+
+
   return (
     <div>
 
@@ -166,25 +182,12 @@ const Headercan = (props: Props) => {
                               <span><i className="fa fa-search" /></span>
                             </div>
                           </div>
-                          <div className="col-md-4">
-                            <select id="computer-languages" >
-                              <option value={0} hidden>Tất cả ngôn ngữ</option>
-                              {candidate?.skill && candidate?.skill.map((item: any) => {
-                                return <option key={item.id} value={item.name}>{item.name}</option>
-                              })}
-                            </select>
+                          <div className="col-md-4"  >
+                            <Select options={skillOptions} placeholder="Chọn kĩ năng..." id="computer-languages"></Select>
                             <i className="fa fa-code sfa" aria-hidden="true" />
                           </div>
-                          <div className="col-md-3">
-                            <select id="s-provinces">
-                              <option value={0} hidden>Tất cả địa điểm</option>
-                              <option>Đà Nẵng</option>
-                              <option>Hà Nội</option>
-                              <option>Hồ Chí Minh</option>
-                              <option>Buôn Ma Thuột</option>
-                              <option>Quy Nhơn</option>
-                              <option>Nha Trang</option>
-                            </select>
+                          <div className="col-md-3" >
+                            <Select options={locationOptions} placeholder="Chọn địa điểm..." id="s-provinces"></Select>
                             <i className="fa fa-map-marker sfa" aria-hidden="true" />
                           </div>
                         </div>

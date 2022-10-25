@@ -1,9 +1,17 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
+
+
 
 export const instance = axios.create({
-   baseURL: 'http://datnweb19.herokuapp.com/api', 
+   baseURL: 'http://datnweb19.herokuapp.com/api',
    headers: {
       'Content-type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
    }
 })
+
+export const httpOptions = {
+   headers: {
+      Authorization: `Bearer Token`
+   }
+}
