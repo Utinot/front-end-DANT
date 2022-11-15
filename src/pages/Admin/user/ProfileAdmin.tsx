@@ -20,7 +20,6 @@ const ProfileAdmin = (props: Props) => {
     const { data } = await listNews();
     setNews(data);
   };
-  console.log(news?.company?.[0]);
 
   return (
     <div>
