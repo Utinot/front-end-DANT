@@ -24,6 +24,7 @@ const { TextArea } = Input;
 
 type Props = {};
 
+
 const Edit = (props: Props) => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any>([]);
@@ -34,6 +35,7 @@ const Edit = (props: Props) => {
     getCategories();
     getEditNews(id);
   }, []);
+  
   // const onupdate: SubmitHandler<any> = async (formData: any) => {
   //   const { data } = await updateNews(formData);
   // };
