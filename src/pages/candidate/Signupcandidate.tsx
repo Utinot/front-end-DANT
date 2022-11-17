@@ -4,11 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../../api/auth";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-// import { useDispatch } from 'react-redux'
-// import Header2 from "../../components/candidate/Header2";
-// import { signUpByUser } from '../../features/auth/authSlice'
-// import Logo from '../../assets/images/logo.jpg';
-import images from "../../images/sec-safe.png";
+import Swal from "sweetalert2";
+import images from "../../assets/images/sec-safe.png";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
@@ -48,18 +45,28 @@ const Signupcandidate = (props: Props) => {
   });
   const onSignup: SubmitHandler<FormValues> = async (formData: any) => {
     const { data } = await signup(formData);
-    // window.location.reload("/")
-    // navigate("/");
-    window.location.href ="/"
-    toast.success('Đăng kí tài khoản ứng viên thành công!');
-    return true;
-  }
+    if (data.status == 200) {
+      // window.location.href = "/";
+      Swal.fire({
+        icon: 'success',
+        title: 'Đăng kí thành công!',
+        text: 'Ấn Oke để tiếp tục đăng kí!',
+        footer: '<a href="/">Mời bạn đăng nhập </a>'
+    });
+     
+      return true;
+    } else {
+      toast.error(data.message);
+    }
+  };
   return (
-    <div  className="container">
+    <div className="container">
       <blockquote className="blockquote text-center ">
         <p className="mb-0">
-        Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý tưởng
+          Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý
+          tưởng
         </p>
+       
         <footer className="blockquote-footer">
           Đăng kí <cite title="Source Title">Ứng viên</cite>
         </footer>
@@ -79,7 +86,6 @@ const Signupcandidate = (props: Props) => {
                 method="POST"
                 onSubmit={handleSubmit(onSignup)}
               >
-                
                 <input type="text" hidden value="1" {...register("id")} />
                 <div className=" ">
                   <label htmlFor="fullName" className="fs-6 fw-normal py-2">
@@ -144,7 +150,7 @@ const Signupcandidate = (props: Props) => {
                 </div>
                 <div className="form-group d-block frm-text">
                   <a href="#" className="fg-login d-inline-block" />
-                  
+
                   <a href="#" className="fg-login float-right d-inline-block">
                     Bạn đã có tài khoản? Đăng Nhập
                   </a>
@@ -152,10 +158,10 @@ const Signupcandidate = (props: Props) => {
                 <button
                   type="submit"
                   className=" btn btn-success float-right btn-login d-block w-100 cocaicc"
-                  
                 >
                   Đăng Ký
-                </button><br />
+                </button>
+                <br />
                 <div className="form-group d-block w-100 mt-5">
                   <div className="text-or text-center">
                     <span>Hoặc</span>
@@ -163,15 +169,15 @@ const Signupcandidate = (props: Props) => {
                   <br />
                   <div className="row">
                     <div className="col-sm-6 col-12 pr-7">
-                      <button className="btn  btn-login-facebook d-block w-100 float-left fb" >
-                      <FacebookOutlined className="fbIcon" />
+                      <button className="btn  btn-login-facebook d-block w-100 float-left fb">
+                        <FacebookOutlined className="fbIcon" />
                         <span> Facebook</span>
                       </button>
                     </div>
-                   
+
                     <div className="col-sm-6 col-12 pl-7">
                       <button className="btn  btn-login-google btnw w-100 float-left gg">
-                      <GoogleOutlined className="ggIcon"/>
+                        <GoogleOutlined className="ggIcon" />
                         <span> Google</span>
                       </button>
                     </div>
