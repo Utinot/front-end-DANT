@@ -5,17 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Navigate, useParams } from "react-router-dom";
 import { number, string } from "yup";
 import { isAuthenticate } from "../../../api/auth";
-import { listNews, listprofile } from "../../../api/home";
-import { updateProfileemp } from "../../../api/profile";
+import { listprofileAdmin, listprofileAdmincom, updateProfileemp } from "../../../api/profile";
 
 type Props = {};
-
-type fromdata = {
-  avatar: string,
-  nameEmployer: string,
-  id: number
-}
-
 
 const ProfileAdmin = (props: Props) => {
   const [profile, setProfile] = useState<any>([]);
@@ -27,36 +19,19 @@ const ProfileAdmin = (props: Props) => {
     formState: { errors },
     reset,
   } = useForm<any>({});
+
   useEffect(() => {
-    getNews();
+    getprofileEmp();
   }, []);
 
-  const getNews = async () => {
-    const { data } = await listprofile();
+  const getprofileEmp = async () => {
+    const { data } = await listprofileAdmin();
     setProfile(data);
   };
-  console.log(profile);
 
-  // function handleSubmi(formDataEmp: any) {
-  //   updateProfileemp(data.id, formDataEmp)
-  // }
-  const fromdata = profile?.employer
-  const onupdateEmp: SubmitHandler<any> = async (fromdata: any) => {
-
-    // const product = {
-    //   name: "nameEmployer",
-    //   phone: 0
-    // };
-    await updateProfileemp(data.id, fromdata)
-    console.log(fromdata);
-  }
   const onupdateCom: SubmitHandler<any> = async (formData: any) => {
     await updateProfileemp(data.id, formData)
   }
-  // handleAlert(){
-
-  // }
-
 
   return (
     <div>
@@ -75,7 +50,7 @@ const ProfileAdmin = (props: Props) => {
               {profile.employer?.map((employer: any) => (
                 <div className="_dashboard_content_body py-3 px-3">
                   <form className="row"
-                    onSubmit={handleSubmit(onupdateEmp)}
+                    onSubmit={handleSubmit(onupdateCom)}
                     method="POST"
                   >
                     <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
@@ -132,13 +107,12 @@ const ProfileAdmin = (props: Props) => {
                               Số điện thoại
                             </label>
                             <input
-                              type="text"
+                              type="number"
                               className="form-control rounded"
                               {...register("phoneEmployer", {
                                 required: true,
                               })}
                               defaultValue={employer.phone}
-
                             />
                             {errors?.phoneEmployer && <span> khong được để trông</span>}
 
@@ -197,9 +171,8 @@ const ProfileAdmin = (props: Props) => {
             </div>
           </div>
         </div>
-
-        <div className="row">
-          <div className="col-lg-12 col-md-12">
+        {/* <div className="row"> */}
+        {/* <div className="col-lg-12 col-md-12">
             <div className="_dashboard_content bg-white rounded mb-4">
               <div className="_dashboard_content_header br-bottom py-3 px-3">
                 <div className="_dashboard__header_flex">
@@ -245,7 +218,7 @@ const ProfileAdmin = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="col-lg-12 col-md-12">
+        <div className="col-lg-12 col-md-12">
             <div className="_dashboard_content bg-white rounded mb-4">
               <div className="_dashboard_content_header br-bottom py-3 px-3">
                 <div className="_dashboard__header_flex">
@@ -255,7 +228,7 @@ const ProfileAdmin = (props: Props) => {
                   </h4>
                 </div>
               </div>
-              {profile.company?.map((company: any) => (
+              {profileCom.company?.map((company: any) => (
                 <div className="_dashboard_content_body py-3 px-3">
                   <form className="row">
                     <input
@@ -363,8 +336,8 @@ const ProfileAdmin = (props: Props) => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
     </div>
   );

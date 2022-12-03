@@ -1,14 +1,103 @@
-import React from "react";
+import { ExpandOutlined, SearchOutlined } from "@ant-design/icons";
+import React, { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { signin } from "../api/auth";
-import Header from "../layout/DefaultLayout/Header/Header";
+import { listCandidate, searchJob } from "../api/home";
+import PropTypes from "prop-types";
 
 type Props = {};
 
 const Home = (props: Props) => {
+  const [getAllSkill, setSkill] = useState<any>([]);
+  const [getAllLocation, setLocation] = useState<any>([]);
+  // const [search, setSearch] = useState("");
+  // console.log(search);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const { data } = await listCandidate();
+    // const { data } = await searchJob();
+    setSkill(data);
+    setLocation(data);
+  };
+
+
   return (
     <div>
-      <Header />
+      {/* <!-- ======================= Home Banner ======================== --> */}
+      <div
+        className="home-banner margin-bottom-0"
+        style={{
+          background:
+            "#00ab46 url(https://res.cloudinary.com/dgeqw8b5i/image/upload/v1666583728/gd/banner-5_rnetjw.jpg) no-repeat ",
+        }}
+        data-overlay={4}
+      >
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-xl-11 col-lg-12 col-md-12 col-sm-12 col-12">
+              <div className="banner_caption text-center mb-5">
+                <h1 className="banner_title ft-bold mb-1">
+                  Explore More Than 10K+ Jobs
+                </h1>
+                <p className="fs-md ft-medium">
+                  Hi Friends, Your Dream Jobs is Waiting in Your Local City
+                </p>
+              </div>
+              <form className="bg-white rounded p-1">
+                <div className="row no-gutters">
+                  <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <div className="form-group mb-0 position-relative">
+                      <input
+                        type="text"
+                        // name="key"
+                        className="form-control lg left-ico"
+                        placeholder="Job Title, Keyword or Company"
+                        // onChange={(e) => setSearch(e.target.value)}
+                      />
+                      <SearchOutlined className="bnc-ico lni lni-search-alt" />
+                    </div>
+                  </div>
+                  <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <div className="form-group mb-0 position-relative">
+                      <select className="custom-select lg b-0" name="" id="">
+                        <option value="">Chọn Kĩ Năng</option>
+                        {getAllSkill.skill?.map((item: any) => {
+                          return <option value={item.id}>{item.name}</option>
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <div className="form-group mb-0 position-relative">
+                      <select className="custom-select lg b-0">
+                        <option value="">Chọn Vùng Miền</option>
+                        {getAllLocation.location?.map((item: any) => {
+                          return <option value={item.id}>{item.name}</option>;
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                    <div className="form-group mb-0 position-relative">
+                      <button
+                        className="btn full-width custom-height-lg theme-bg text-white fs-md"
+                        type="button"
+                      >
+                        Find Job
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ======================= Job List ======================== */}
       <section className="middle">
         <div className="container">
@@ -304,11 +393,11 @@ const Home = (props: Props) => {
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
               <div className="position-relative text-center">
                 <a
-                  href="job-search-v1.html"
+                  href="/search"
                   className="btn btn-md text-light rounded theme-bg"
                 >
                   Explore More Jobs
-                  <i className="lni lni-arrow-right-circle ml-2" />
+                  <ExpandOutlined className="lni lni-arrow-right-circle ml-2" />
                 </a>
               </div>
             </div>

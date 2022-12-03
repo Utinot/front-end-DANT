@@ -47,8 +47,8 @@ const items: MenuItem[] = [
     getItem("Alex", "7"),
   ]),
   getItem("Team", "sub2", <TeamOutlined />, [
-    getItem("Team 1", "6"),
-    getItem("Team 2", "8"),
+    getItem("Team 1", "10"),
+    getItem("Team 2", "11"),
   ]),
   getItem("Files", "9", <FileOutlined />),
 ];
@@ -78,9 +78,9 @@ const AdminLayout = (props: Props) => {
           className="header site-layout-background"
           style={{ padding: 15 }}
         >
-          <p style={{ marginBottom: 0 }}>Hello, {user.name}</p>
+          <p style={{ marginBottom: 0}}>Hello, {user.name}</p>
           <Avatar size="large" icon={<UserOutlined />} />
-          <Link to="/">
+          <Link to="/" >
             <a className="" onClick={() => logout()}>
               <LoginOutlined />
             </a>
