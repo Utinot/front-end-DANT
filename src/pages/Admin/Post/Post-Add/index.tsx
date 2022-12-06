@@ -30,29 +30,29 @@ const PostAdd = (props: Props) => {
 
   const getCategories = async () => {
     const { data } = await listNews();
-    setCategories(data);
+    setCategories(data);  
   };
 
   const oncreate: SubmitHandler<any> = async (dataform: any) => {
-    const formData = new FormData();
-    formData.append("file", avatar);
-    formData.append("upload_preset", "dtertjeta");
-    const {
-      data: { url },
-    } = await axios.post(
-      `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
-      formData
-    );
-    const product = {
-      ...dataform,
-      logo: url,
-    };
-    const { data } = await createNews(product);
+    // const formData = new FormData();
+    // formData.append("file", avatar);
+    // formData.append("upload_preset", "dtertjeta");
+    // const {
+    //   data: { url },
+    // } = await axios.post(
+    //   `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
+    //   formData
+    // );
+    // const product = {
+    //   ...dataform,
+    //   logo: url,
+    // };
+    const { data } = await createNews(dataform);
   };
 
-  const uploadImg = async (e: any) => {
-    setAvatar(e.target.files[0]);
-  };
+  // const uploadImg = async (e: any) => {
+  //   setAvatar(e.target.files[0]);
+  // };
 
   console.log(categories);
 
@@ -86,8 +86,8 @@ const PostAdd = (props: Props) => {
                       <select className="form-control" required aria-label="select example"  {...register("sex", { required: true })}>
                         <option value="">chọn giới tính</option>
                         <option value="0">không yêu cầu giới tính</option>
-                        <option value="1">Nam</option>
-                        <option value="2">Nữ</option>
+                        <option value="nam">Nam</option>
+                        <option value="nữ">Nữ</option>
                       </select>
                     </div>
                     <div className="mb-4">
@@ -190,10 +190,10 @@ const PostAdd = (props: Props) => {
                         </label>
                       </div>
                     </div>
-                    <div>
+                    {/* <div>
                       <div>logo</div>
                       <input type="file" className="form-control" onChange={uploadImg} />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="rec-submit">
