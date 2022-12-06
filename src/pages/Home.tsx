@@ -1,17 +1,27 @@
 import { ExpandOutlined, SearchOutlined } from "@ant-design/icons";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { signin } from "../api/auth";
-import { listCandidate, searchJob } from "../api/home";
-import PropTypes from "prop-types";
+import { listCandidate } from "../api/home";
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { SearchOutlined } from "@ant-design/icons";
+
 
 type Props = {};
+interface FormValues {
+  keyword: string,
+  skill_id: number,
+  location_id: number
+}
 
 const Home = (props: Props) => {
-  // const [getAllSkill, setSkill] = useState<any>([]);
-  // const [getAllLocation, setLocation] = useState<any>([]);
-  const [getJob, setGetjob] = useState<any>([])
+  const [getAllSkill, setSkill] = useState<any>([]);
+  const [getAllLocation, setLocation] = useState<any>([]);
+  // const [search, setSearch] = useState("");
+  // console.log(search);
 
+
+  const navigate = useNavigate()
   useEffect(() => {
     getData();
   }, []);
@@ -22,8 +32,6 @@ const Home = (props: Props) => {
     // setLocation(data);
     setGetjob(data)
   };
-
-  // console.log(getJob.job);
 
 
   return (
@@ -48,7 +56,7 @@ const Home = (props: Props) => {
                   Hi Friends, Your Dream Jobs is Waiting in Your Local City
                 </p>
               </div>
-              <form className="bg-white rounded p-1">
+              <form className="bg-white rounded p-1" onSubmit={handleSubmit(onSubmit)}>
                 <div className="row no-gutters">
                   <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
                     <div className="form-group mb-0 position-relative">
@@ -57,16 +65,16 @@ const Home = (props: Props) => {
                         // name="key"
                         className="form-control lg left-ico"
                         placeholder="Job Title, Keyword or Company"
-                      // onChange={(e) => setSearch(e.target.value)}
+                        // onChange={(e) => setSearch(e.target.value)}
                       />
-                      <SearchOutlined className="bnc-ico lni lni-search-alt" />
+                      <SearchOutlined className="bnc-ico" />
                     </div>
                   </div>
                   <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                     <div className="form-group mb-0 position-relative">
-                      <select className="custom-select lg b-0" name="" id="">
+                      <select className="custom-select lg b-0" {...register('skill_id')}>
                         <option value="">Chọn Kĩ Năng</option>
-                        {getJob.skill?.map((item: any) => {
+                        {getAllSkill.skill?.map((item: any) => {
                           return <option value={item.id}>{item.name}</option>
                         })}
                       </select>
@@ -74,9 +82,9 @@ const Home = (props: Props) => {
                   </div>
                   <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                     <div className="form-group mb-0 position-relative">
-                      <select className="custom-select lg b-0">
+                      <select className="custom-select lg b-0" {...register('location_id')}>
                         <option value="">Chọn Vùng Miền</option>
-                        {getJob.location?.map((item: any) => {
+                        {getAllLocation.location?.map((item: any) => {
                           return <option value={item.id}>{item.name}</option>;
                         })}
                       </select>
@@ -86,9 +94,9 @@ const Home = (props: Props) => {
                     <div className="form-group mb-0 position-relative">
                       <button
                         className="btn full-width custom-height-lg theme-bg text-white fs-md"
-                        type="button"
+                        type="submit"
                       >
-                        Find Job
+                        Tìm kiếm
                       </button>
                     </div>
                   </div>
