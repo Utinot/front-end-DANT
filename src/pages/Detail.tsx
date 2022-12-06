@@ -1,10 +1,63 @@
 import { FileJpgOutlined, LaptopOutlined, LoadingOutlined, ManOutlined, PoundOutlined, StarOutlined, TeamOutlined, TrophyOutlined } from "@ant-design/icons";
-import React from "react";
-import { Outlet } from "react-router-dom";
+import axios from "axios";
+import { id } from "date-fns/locale";
+import React, { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Outlet, useParams } from "react-router-dom";
+import { defaultAriaLiveMessages } from "react-select/dist/declarations/src/accessibility";
+import { createNews, detailCan } from "../api/home";
+import { updateProfilecom } from "../api/profile";
 
 type Props = {};
 
 const Detail = (props: Props) => {
+  const [getJob, setGetjob] = useState<any>([])
+  const [avatar, setAvatar] = useState("");
+  const { id } = useParams();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<any>({});
+
+  useEffect(() => {
+    getData(id);
+  }, []);
+
+  const getData = async (id: any) => {
+    const { data } = await detailCan(id);
+    setGetjob(data)
+  };
+  const detailJob = getJob.job?.[0]
+
+  const onupdateCom: SubmitHandler<any> = async (dataform: any) => {
+    const formData = new FormData();
+    formData.append("file", avatar);
+    formData.append("upload_preset", "dtertjeta");
+    const {
+      data: { url },
+    } = await axios.post(
+      `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
+      formData
+    );
+    const product = {
+      ...dataform,
+      logo: url,
+    };
+    const { data } = await createNews(product)
+    console.log(product);
+    
+  }
+
+  const uploadImg = async (e: any) => {
+    setAvatar(e.target.files[0]);
+  };
+
+  console.log(detailJob);
+
+  console.log(getJob.relate?.[0][0].getskill);
+
   return (
     <div>
       <section className="bg-light py-5 position-relative">
@@ -16,7 +69,7 @@ const Detail = (props: Props) => {
                   <div className="jbd-flex d-flex align-items-center justify-content-start">
                     <div className="jbd-01-thumb">
                       <img
-                        src="assets/img/c-1.png"
+                        src={detailJob?.logo}
                         className="img-fluid"
                         width={90}
                       />
@@ -24,27 +77,24 @@ const Detail = (props: Props) => {
                     <div className="jbd-01-caption pl-3">
                       <div className="tbd-title">
                         <h4 className="mb-0 ft-medium fs-md">
-                          Senior UI/UX Web Designer in USA
+                          {detailJob?.title}
                         </h4>
                       </div>
                       <div className="jbl_location mb-3">
                         <span>
                           <i className="lni lni-map-marker mr-1" />
-                          San Francisco, USA
-                        </span>
-                        <span className="medium ft-medium text-warning ml-3">
-                          Part Time
+                          {detailJob?.getlocation.name}
                         </span>
                       </div>
                       <div className="jbl_info01">
                         <span className="px-2 py-1 ft-medium medium rounded theme-cl theme-bg-light mr-2">
-                          Magento
+                          {detailJob?.get_wage.name}
                         </span>
-                        <span className="px-2 py-1 ft-medium medium rounded text-danger bg-light-danger mr-2">
-                          WordPress
-                        </span>
-                        <span className="px-2 py-1 ft-medium medium rounded text-purple bg-light-purple">
-                          Laravel
+                      </div>
+                      <div className="jbl_location mb-3">
+                        <span>
+                          <i className="lni lni-map-marker mr-1" />
+                          <span>Hạn nộp</span> {detailJob?.end_job_time}
                         </span>
                       </div>
                     </div>
@@ -52,10 +102,10 @@ const Detail = (props: Props) => {
                   <div className="jbd-01-right text-right hide-1023">
                     <div className="jbl_button mb-2">
                       <a
-                        href="javascript:void(0);"
+                        data-toggle="modal" data-target="#exampleModal1"
                         className="btn rounded theme-bg-light theme-cl fs-sm ft-medium"
                       >
-                        Apply This Job
+                        Xin ứng tuyển
                       </a>
                     </div>
                     <div className="jbl_button">
@@ -63,7 +113,7 @@ const Detail = (props: Props) => {
                         href="javascript:void(0);"
                         className="btn rounded bg-white border fs-sm ft-medium"
                       >
-                        View Company
+                        Xem công ty
                       </a>
                     </div>
                   </div>
@@ -81,61 +131,42 @@ const Detail = (props: Props) => {
                           <ManOutlined />
                         </div>
                         <span>Giới tính</span>
-                        <p>nam</p>
-                      </div>
-                      <div className="item">
-                        <div className="icon">
-                          <PoundOutlined />
-                        </div>
-                        <span>tiết kiệm</span>
-                        <p>nam</p>
+                        <p>{detailJob?.sex}</p>
                       </div>
                       <div className="item">
                         <div className="icon">
                           <LaptopOutlined />
                         </div>
                         <span>Hình thức làm việc</span>
-                        <p>112222 triệu</p>
+                        <p>{detailJob?.get_time_work.name}</p>
                       </div>
                       <div className="item">
                         <div className="icon">
                           <TeamOutlined />
                         </div>
                         <span>số lượng tuyển</span>
-                        <p>112222 triệu</p>
+                        <p>{detailJob?.Quatity}</p>
                       </div>
                       <div className="item">
                         <div className="icon">
                           <TrophyOutlined />
                         </div>
                         <span>cấp bậc</span>
-                        <p>112222 triệu</p>
+                        <p>{detailJob?.getwk_form.name}</p>
                       </div>
                       <div className="item">
                         <div className="icon">
                           <StarOutlined />
                         </div>
                         <span>kinh nghiệm</span>
-                        <p>112222 triệu</p>
+                        <p>{detailJob?.get_experience.name}</p>
                       </div>
                     </div>
                   </div>
                   <div className="jbd-details mb-4">
                     <h5 className="ft-medium fs-md">Mô tả công việc</h5>
                     <p>
-                      Chúng tôi đang tìm kiếm một Nhà phát triển PHP chịu trách
-                      nhiệm quản lý các dịch vụ back-end và trao đổi dữ liệu
-                      giữa máy chủ và người dùng. Trọng tâm chính của bạn sẽ là
-                      phát triển tất cả logic phía máy chủ, định nghĩa và duy
-                      trì cơ sở dữ liệu trung tâm
-                    </p>
-                    <p>
-                      Trên toàn mạng lưới của mình, chúng tôi cố gắng cung cấp
-                      các dịch vụ nhanh chóng, dựa trên hiệu suất, tập trung vào
-                      ngành và hỗ trợ công nghệ, phản ánh kiến ​​thức được chia
-                      sẻ về các ngành công nghiệp địa phương và toàn cầu cũng
-                      như kinh nghiệm của chúng tôi về môi trường kinh doanh Ấn
-                      Độ.
+                      {detailJob?.describe}
                     </p>
                   </div>
                   <div className="jbd-details mb-3">
@@ -152,6 +183,7 @@ const Detail = (props: Props) => {
                             </h6>
                           </div>
                         </div>
+                        {detailJob?.Candidate_requirements}
                         <div className="mb-2 mr-4 ml-lg-0 mr-lg-4">
                           <div className="d-flex align-items-center">
                             <div className="rounded-circle bg-light-success theme-cl p-1 small d-flex align-items-center justify-content-center">
@@ -162,79 +194,21 @@ const Detail = (props: Props) => {
                             </h6>
                           </div>
                         </div>
-                        <div className="mb-2 mr-4 ml-lg-0 mr-lg-4">
-                          <div className="d-flex align-items-center">
-                            <div className="rounded-circle bg-light-success theme-cl p-1 small d-flex align-items-center justify-content-center">
-                              <i className="fas fa-check small" />
-                            </div>
-                            <h6 className="mb-0 ml-3 text-muted fs-sm">
-                              Understanding of MVC design pattern.
-                            </h6>
-                          </div>
-                        </div>
-                        <div className="mb-2 mr-4 ml-lg-0 mr-lg-4">
-                          <div className="d-flex align-items-center">
-                            <div className="rounded-circle bg-light-success theme-cl p-1 small d-flex align-items-center justify-content-center">
-                              <i className="fas fa-check small" />
-                            </div>
-                            <h6 className="mb-0 ml-3 text-muted fs-sm">
-                              Expertise in PHP, MVC Frameworks and good
-                              technology exposure of Codeigniter .
-                            </h6>
-                          </div>
-                        </div>
-                        <div className="mb-2 mr-4 ml-lg-0 mr-lg-4">
-                          <div className="d-flex align-items-center">
-                            <div className="rounded-circle bg-light-success theme-cl p-1 small d-flex align-items-center justify-content-center">
-                              <i className="fas fa-check small" />
-                            </div>
-                            <h6 className="mb-0 ml-3 text-muted fs-sm">
-                              Basic understanding of front-end technologies,
-                              such as JavaScript, HTML5, and CSS3
-                            </h6>
-                          </div>
-                        </div>
-                        <div className="mb-2 mr-4 ml-lg-0 mr-lg-4">
-                          <div className="d-flex align-items-center">
-                            <div className="rounded-circle bg-light-success theme-cl p-1 small d-flex align-items-center justify-content-center">
-                              <i className="fas fa-check small" />
-                            </div>
-                            <h6 className="mb-0 ml-3 text-muted fs-sm">
-                              Good knowledge of relational databases, version
-                              control tools and of developing web services.
-                            </h6>
-                          </div>
-                        </div>
-                        <div className="mb-2 mr-4 ml-lg-0 mr-lg-4">
-                          <div className="d-flex align-items-center">
-                            <div className="rounded-circle bg-light-success theme-cl p-1 small d-flex align-items-center justify-content-center">
-                              <i className="fas fa-check small" />
-                            </div>
-                            <h6 className="mb-0 ml-3 text-muted fs-sm">
-                              Proficient understanding of code versioning tools,
-                              such as Git.
-                            </h6>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
                   <div className="jbd-details mb-4">
-                    <h5 className="ft-medium fs-md">Yêu cầu ứng viên</h5>
                     <div className="other-details">
-                      <div className="details ft-medium">
-                        <label className="text-muted">Role</label>
-                        <span className="text-dark">
-                          Database Architect / Designer
-                        </span>
-                      </div>
                       <h5 className="ft-medium fs-md">kỹ năng chính</h5>
                       <ul className="p-0 skills_tag text-left">
-                        <li>
-                          <span className="px-2 py-1 medium skill-bg rounded text-dark">
-                            Joomla
-                          </span>
-                        </li>
+                        {detailJob?.getskill.map((item: any) => (
+                          <li>
+                            <span className="px-2 py-1 medium skill-bg rounded text-dark">
+                              {item.name}
+                            </span>
+                          </li>
+                        ))}
+
                       </ul>
                     </div>
                   </div>
@@ -242,18 +216,10 @@ const Detail = (props: Props) => {
                     <h5 className="ft-medium fs-md">Quyền lợi</h5>
                     <div className="other-details">
                       <div className="details ft-medium">
-                        <span className="text-dark">LƯƠNG VÀ THƯỞNG:</span>
-                        <h6 className="mb-0 ml-3 text-muted fs-sm">
-                          - Strong core PHP Hands on experience.
-                        </h6>
-                        <span className="text-dark">ĐÃI NGỘ & PHÚC LỢI::</span>
-                        <h6 className="mb-0 ml-3 text-muted fs-sm">
-                          - Strong core PHP Hands on experience.
-                        </h6>
-                        <span className="text-dark">CHẾ ĐỘ NGHỈ PHÉP:</span>
-                        <h6 className="mb-0 ml-3 text-muted fs-sm">
-                          - Strong core PHP Hands on experience.
-                        </h6>
+                        <span>
+                          {detailJob?.benefit}
+                        </span>
+
                       </div>
                     </div>
                   </div>
@@ -293,13 +259,13 @@ const Detail = (props: Props) => {
                           href="#"
                           className="btn btn-md rounded gray fs-sm ft-medium mr-2"
                         >
-                          Save This Job
+                          lưu việc làm
                         </a>
                         <a
                           href="#"
                           className="btn btn-md rounded theme-bg text-light fs-sm ft-medium"
                         >
-                          Apply Job
+                          Ứng tuyển
                         </a>
                       </div>
                     </div>
@@ -311,120 +277,68 @@ const Detail = (props: Props) => {
                   <div className="icongach"></div>
                   <h1>Việc làm liên quan</h1>
                 </div>
-                <div className="jbd-01 d-flex align-items-center justify-content-between">
-                  <div className="jbd-flex d-flex align-items-center justify-content-start">
-                    <div className="jbd-01-thumb">
-                      <img
-                        src="assets/img/c-1.png"
-                        className="img-fluid"
-                        width={90}
-                      />
+                {getJob.relate?.[0].map((item: any) => (
+                  <div>
+                    <div className="jbd-01 d-flex align-items-center justify-content-between">
+                      <div className="jbd-flex d-flex align-items-center justify-content-start">
+
+                        <div className="jbd-01-thumb">
+                          <img
+                            src={item.logo}
+                            className="img-fluid"
+                            width={90}
+                          />
+                        </div>
+                        <div className="jbd-01-caption pl-3">
+                          <div className="tbd-title">
+                            <h4 className="mb-0 ft-medium fs-md">
+                              {item.title}
+                            </h4>
+                          </div>
+                          <div className="jbl_location mb-3">
+                            <span>
+                              <i className="lni lni-map-marker mr-1" />
+                              {/* {item.getlocation.name} */}
+                            </span>
+                            <span className="medium ft-medium text-warning ml-3">
+                              Part Time
+                            </span>
+                          </div>
+                          <div className="jbl_info01">
+                            {getJob.relate?.[0][0].getskill.map((skill: any) => (
+                              <span className="px-2 py-1 ft-medium medium rounded theme-cl theme-bg-light mr-2">
+                                {skill.name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="jbd-01-right text-right hide-1023">
+                        <div className="jbl_button mb-2">
+                          <a
+                            href="javascript:void(0);"
+                            className="btn rounded theme-bg-light theme-cl fs-sm ft-medium"
+                          >
+                            Apply This Job
+                          </a>
+                        </div>
+                        <div className="jbl_button">
+                          <a
+                            href="javascript:void(0);"
+                            className="btn rounded bg-white border fs-sm ft-medium"
+                          >
+                            View Company
+                          </a>
+                        </div>
+                      </div>
+
                     </div>
-                    <div className="jbd-01-caption pl-3">
-                      <div className="tbd-title">
-                        <h4 className="mb-0 ft-medium fs-md">
-                          Senior UI/UX Web Designer in USA
-                        </h4>
-                      </div>
-                      <div className="jbl_location mb-3">
-                        <span>
-                          <i className="lni lni-map-marker mr-1" />
-                          San Francisco, USA
-                        </span>
-                        <span className="medium ft-medium text-warning ml-3">
-                          Part Time
-                        </span>
-                      </div>
-                      <div className="jbl_info01">
-                        <span className="px-2 py-1 ft-medium medium rounded theme-cl theme-bg-light mr-2">
-                          Magento
-                        </span>
-                        <span className="px-2 py-1 ft-medium medium rounded text-danger bg-light-danger mr-2">
-                          WordPress
-                        </span>
-                        <span className="px-2 py-1 ft-medium medium rounded text-purple bg-light-purple">
-                          Laravel
-                        </span>
-                      </div>
-                    </div>
+                    <hr />
                   </div>
-                  <div className="jbd-01-right text-right hide-1023">
-                    <div className="jbl_button mb-2">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn rounded theme-bg-light theme-cl fs-sm ft-medium"
-                      >
-                        Apply This Job
-                      </a>
-                    </div>
-                    <div className="jbl_button">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn rounded bg-white border fs-sm ft-medium"
-                      >
-                        View Company
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="jbd-01 d-flex align-items-center justify-content-between">
-                  <div className="jbd-flex d-flex align-items-center justify-content-start">
-                    <div className="jbd-01-thumb">
-                      <img
-                        src="assets/img/c-1.png"
-                        className="img-fluid"
-                        width={90}
-                      />
-                    </div>
-                    <div className="jbd-01-caption pl-3">
-                      <div className="tbd-title">
-                        <h4 className="mb-0 ft-medium fs-md">
-                          Senior UI/UX Web Designer in USA
-                        </h4>
-                      </div>
-                      <div className="jbl_location mb-3">
-                        <span>
-                          <i className="lni lni-map-marker mr-1" />
-                          San Francisco, USA
-                        </span>
-                        <span className="medium ft-medium text-warning ml-3">
-                          Part Time
-                        </span>
-                      </div>
-                      <div className="jbl_info01">
-                        <span className="px-2 py-1 ft-medium medium rounded theme-cl theme-bg-light mr-2">
-                          Magento
-                        </span>
-                        <span className="px-2 py-1 ft-medium medium rounded text-danger bg-light-danger mr-2">
-                          WordPress
-                        </span>
-                        <span className="px-2 py-1 ft-medium medium rounded text-purple bg-light-purple">
-                          Laravel
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="jbd-01-right text-right hide-1023">
-                    <div className="jbl_button mb-2">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn rounded theme-bg-light theme-cl fs-sm ft-medium"
-                      >
-                        Apply This Job
-                      </a>
-                    </div>
-                    <div className="jbl_button">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn rounded bg-white border fs-sm ft-medium"
-                      >
-                        View Company
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <hr />
+
+                ))}
+
+
               </div>
             </div>
             {/* Sidebar */}
@@ -506,6 +420,78 @@ const Detail = (props: Props) => {
           </div>
         </div>
       </section>
+      {/* modal */}
+      <form onSubmit={handleSubmit(onupdateCom)}>
+        <div>
+          <div className="modal fade" id="exampleModal1" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">Ứng tuyển {detailJob?.title}</h5>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <div className="modal-body">
+                    <div id="old-apply" style={{ display: 'none' }}>
+                      <div className="row">
+                        <div className="col-sm-8"><p><strong>Sử dụng CV đã ứng tuyển</strong></p></div>
+                        <div className="col-sm-4 text-right"><a href="#" className="btn btn-default btn-sm" id="btn-new-apply"><i className="fa fa-pencil" /> Thay đổi</a></div>
+                      </div>
+                      <div style={{ marginTop: 8, border: '1px dashed #ccc', padding: '5px 10px' }}>
+                        <table>
+                          <tbody><tr>
+                            <th>CV</th>
+                            <td style={{ paddingLeft: 5 }}>: <a href="https://www.topcv.vn/cv-ung-tuyen/20a915c43f91a8e2b0e9d92c00783064/VQRtZmFfDy5XZHh0PDU0IgAnJE" target="blank" className="text-highlight">Đăng ký thực tập front-end <small><i>(Click để xem)</i></small></a></td>
+                          </tr>
+                          </tbody></table>
+                        <input type="hidden" name="last_apply_id" />
+                      </div>
+                    </div>
+                    <div id="new-apply" style={{ display: 'block' }}>
+                      <div id="frm-select-cv-online">
+                        <div className="text-right" style={{ marginBottom: 10 }}>
+                          {/* <a href="#" className="btn-sm btn btn-default btn-old-apply"><i className="fa fa-undo" /> Dùng CV đã nộp</a> */}
+                          <div className="custom-file">
+                            <input type="file" className="custom-file-input"
+                              {...register('logo', { required: true })}
+                              onChange={uploadImg}
+                            />
+                            <label className="custom-file-label" htmlFor="customFile">
+                              <i className="fa fa-user" />Tải Cv Lên
+                            </label>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-xs-6">
+                            <label>Chọn CV đã tải lên: <span className="italic text-primary text-small"><i className="fa fa-thumbs-o-up" /> Khuyên dùng</span></label>
+                            <ul className="cv-choosen">
+                              <li className="radio-choose-active">
+                                <input id="apply-cv-f37d8a03bd44a418a363c6f77465db2c" type="radio" name="cvid" defaultValue="f37d8a03bd44a418a363c6f77465db2c" defaultChecked />
+                                <label htmlFor="apply-cv-f37d8a03bd44a418a363c6f77465db2c"> Đăng ký thực tập front-end <a className="text-highlight" target="_blank" href="https://www.topcv.vn/xem-cv/VQYCXVtVUwdaBlJSUQIEWlkAVFVbAVIGBFBTBwdb2c">(Xem)</a></label>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className="col-xs-6">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" className="btn btn-primary" >Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      {/* end modal */}
       {/* ============================ Job Details End ================================== */}
     </div>
   );

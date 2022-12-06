@@ -53,6 +53,7 @@ const ProfileAdmin = (props: Props) => {
                     onSubmit={handleSubmit(onupdateCom)}
                     method="POST"
                   >
+                    
                     <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                       <div>
                         <input type="hidden" {...register('id', { required: true })}

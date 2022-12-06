@@ -1,7 +1,7 @@
 import { isAuthenticate } from "./auth";
 import { instance } from "./instance";
 
-const data = isAuthenticate();
+const dataAuth = isAuthenticate();
 
 export const listCandidate = () => {
   const url = `/index/list`;
@@ -9,7 +9,7 @@ export const listCandidate = () => {
 };
 
 export const detailCan = (id: any) => {
-  const url = `employer/detail/${id}`;
+  const url = `employer/detail/${id}`;  
   return instance.get(url);
 };
 
@@ -19,7 +19,7 @@ export const addNews = (data: any) => {
 };
 
 export const showNews = () => {
-  const url = `/employer/show/${data.token}`;
+  const url = `/employer/show/${dataAuth.token}`;
   return instance.get(url);
 };
 
@@ -29,17 +29,19 @@ export const removeShowNews = (id: any) => {
 };
 
 export const listNews = () => {
-  const url = `/employer/create/${data.token}`;
+  const url = `/employer/create/${dataAuth.token}`;
   return instance.get(url);
 };
 
 export const createNews = (data: any) => {
+  console.log(data);
   const url = `/employer/store`;
   return instance.post(url, data);
+  
 };
 
 export const listNewsemp = () => {
-  const url = `/employer/index/${data.token}`;
+  const url = `/employer/index/${dataAuth.token}`;
   return instance.get(url);
 };
  export const searchJob = () => {

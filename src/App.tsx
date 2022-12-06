@@ -12,7 +12,6 @@ import PostAdd from "./pages/Admin/Post/Post-Add";
 import Home from "./pages/Home";
 import Detail from "./pages/Detail";
 import Search from "./pages/candidate/Search";
-import Edit from "./pages/Admin/Post/Edit";
 import EditNews from "./pages/Admin/Post/EditNews";
 import DefaultLayout from "./layout/DefaultLayout/DefaultLayout";
 import JobDetail from "./pages/employer/getProfile/JobDetail";
@@ -35,6 +34,8 @@ function App() {
     }
     return props.children
   }
+
+
   return (
     <div className="App">
       <main>
@@ -44,7 +45,7 @@ function App() {
           <Route path="/" element={<DefaultLayout />}>
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
-            <Route path="detail" element={<Detail />} />
+            <Route path="viec-lam-:title-:id" element={<Detail />} />
             <Route path="search" element={<Search />} />
             <Route path="job/:id" element={<JobDetail />} />
             <Route path="profile/:token" element={<Profile />} />
@@ -62,7 +63,6 @@ function App() {
               <Route path="news" element={<News />} />
               <Route path="add" element={<PostAdd />} />
               <Route path="editNews/:id" element={<EditNews />} />
-              <Route path="edit/:id" element={<Edit />} />
             </Route>
           </Route>
           {/* Auth-page */}

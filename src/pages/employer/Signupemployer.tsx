@@ -60,7 +60,6 @@ const Signupemployer = (props: Props) => {
   const onSignup: SubmitHandler<FormValues> = async (formData: any) => {
     const { data } = await signup(formData);
     console.log(data.message);
-    // window.location.href = "/"
     if (data.status == 200) {
       Swal.fire({
         icon: 'success',
@@ -68,7 +67,7 @@ const Signupemployer = (props: Props) => {
         text: 'Ấn Oke để tiếp tục đăng kí!',
         footer: '<a href="/">Mời bạn đăng nhập </a>'
       })
-
+    window.location.href = "/admin"
       return true;
     } else {
       toast.error(data.message);

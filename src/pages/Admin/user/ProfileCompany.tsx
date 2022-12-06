@@ -52,7 +52,6 @@ const ProfileCompany = (props: Props) => {
     const uploadImg = async (e: any) => {
         setAvatar(e.target.files[0]);
     };
-
     return (
         <div>
             <div className="dashboard-widg-bar d-block">
@@ -70,7 +69,7 @@ const ProfileCompany = (props: Props) => {
                             <div className="_dashboard_content_body py-3 px-3">
                                 <form className="row" onSubmit={handleSubmit(onupdateCom)}>
                                     <input
-                                        defaultValue={company.id}
+                                        defaultValue={company?.id ?? ''}
                                         {...register("id", {
                                             required: true,
                                         })}
@@ -82,7 +81,7 @@ const ProfileCompany = (props: Props) => {
                                             <input
                                                 type="text"
                                                 className="form-control rounded"
-                                                defaultValue={company.name}
+                                                defaultValue={company?.name ?? ''}
                                                 {...register("nameCompany", {
                                                     required: true,
                                                 })} />
@@ -96,7 +95,7 @@ const ProfileCompany = (props: Props) => {
                                             <input
                                                 type="text"
                                                 className="form-control rounded"
-                                                defaultValue={company.email}
+                                                defaultValue={company?.email ?? ''}
                                                 {...register("emailCompany", {
                                                     required: true,
                                                 })}
@@ -111,7 +110,7 @@ const ProfileCompany = (props: Props) => {
                                             <input
                                                 type="text"
                                                 className="form-control rounded"
-                                                defaultValue={company.number_member}
+                                                defaultValue={company?.number_member ?? ''}
                                                 {...register("number_member", {
                                                     required: true,
                                                 })}
@@ -126,14 +125,14 @@ const ProfileCompany = (props: Props) => {
                                             <input
                                                 type="text"
                                                 className="form-control rounded"
-                                                defaultValue={company.address}
+                                                defaultValue={company?.address ?? ''}
                                                 {...register("addressCompany", {
                                                     required: true,
                                                 })}
                                             />
                                         </div>
                                     </div>
-                                    <div className="col-xl-6 col-lg-6 col-md-12">
+                                    {/* <div className="col-xl-6 col-lg-6 col-md-12">
                                         <div className="form-group">
                                             <label className="text-dark ft-medium">
                                                 logo của công ty
@@ -144,6 +143,17 @@ const ProfileCompany = (props: Props) => {
                                                 onChange={uploadImg}
                                             />
                                         </div>
+                                    </div> */}
+                                    <div className="custom-file avater_uploads">
+                                        <input
+                                            type="file"
+                                            className="custom-file-input"
+                                            {...register('logo', { required: true })}
+                                            onChange={uploadImg}
+                                        />
+                                        <label className="custom-file-label" htmlFor="customFile">
+                                            <i className="fa fa-user" />
+                                        </label>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
@@ -155,7 +165,7 @@ const ProfileCompany = (props: Props) => {
                                                 {...register("DesceibeCompany", {
                                                     required: true,
                                                 })}
-                                                defaultValue={company.Desceibe}
+                                                defaultValue={company?.Desceibe ?? ''}
                                             />
                                         </div>
                                     </div>

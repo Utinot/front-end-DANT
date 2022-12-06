@@ -26,7 +26,7 @@ const EditNews = (props: Props) => {
   }, []);
 
   const onupdate: SubmitHandler<any> = async (data: any) => {
-    await axios.put(`http://datnweb19.herokuapp.com/api/employer/update/${id}`, data);
+    await axios.put(`http://192.168.1.43:8080/api/employer/update/${id}`, data);
     navigate('/admin/post')
   }
 
@@ -43,9 +43,7 @@ const EditNews = (props: Props) => {
     setCategories(data)
   }
 
-  const uploadImg = async (e: any) => {
-    setAvatar(e.target.files[0]);
-  };
+
 
   const job = editnews?.job?.[0];
   const checkedSkill = (data: any) =>
@@ -185,10 +183,6 @@ const EditNews = (props: Props) => {
                           ))}
                         </label>
                       </div>
-                    </div>
-                    <div>
-                      <div>logo</div>
-                      <input type="file" className="form-control" {...register("logo", { required: true, })} />
                     </div>
                   </div>
                 </div>
