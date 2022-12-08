@@ -2,7 +2,14 @@ import { isAuthenticate } from "./auth";
 import { instance } from "./instance"
 const tokenAuth = isAuthenticate();
 
-
+export const createCv = (data: any) => {
+   return instance.post(`seeker/upload-cv`, data, {
+      headers: {
+         "Content-Type": "multipart/form-data",
+         Authorization: `Bearer ${tokenAuth.token}`
+      }
+   });
+}
 
 export const getProfileByToken = (token: string | undefined) => {
    return instance.get(`seeker/index/${token}`, {
@@ -28,7 +35,7 @@ export const updateProfileemp = (id: number | undefined, data: any) => {
    });
 }
 export const updateProfilecom = (id: number | undefined, data: any) => {
-   return instance.put(`/employer/profile/company/update/${id}`, data, {
+   return instance.post(`/employer/profile/company/update/${id}`, data, {
       headers: {
          Authorization: `Bearer ${tokenAuth.token}`
       }

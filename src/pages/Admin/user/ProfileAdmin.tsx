@@ -12,6 +12,7 @@ type Props = {};
 const ProfileAdmin = (props: Props) => {
   const [profile, setProfile] = useState<any>([]);
   const data = isAuthenticate();
+  const [avatar, setAvatar] = useState("");
 
   const {
     register,
@@ -29,10 +30,25 @@ const ProfileAdmin = (props: Props) => {
     setProfile(data);
   };
 
-  const onupdateCom: SubmitHandler<any> = async (formData: any) => {
-    await updateProfileemp(data.id, formData)
+  const onupdateCom: SubmitHandler<any> = async (dataform: any) => {
+    const formData = new FormData();
+    formData.append("file", avatar);
+    formData.append("upload_preset", "dtertjeta");
+    const {
+      data: { url },
+    } = await axios.post(
+      `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
+      formData
+    );
+    const product = {
+      ...dataform,
+      avatar: url,
+    };
+    await updateProfileemp(data.id, product)
   }
-
+  const uploadImg = async (e: any) => {
+    setAvatar(e.target.files[0]);
+  };
   return (
     <div>
       <div className="dashboard-widg-bar d-block">
@@ -53,7 +69,7 @@ const ProfileAdmin = (props: Props) => {
                     onSubmit={handleSubmit(onupdateCom)}
                     method="POST"
                   >
-                    
+
                     <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                       <div>
                         <input type="hidden" {...register('id', { required: true })}
@@ -64,6 +80,7 @@ const ProfileAdmin = (props: Props) => {
                           type="file"
                           className="custom-file-input"
                           {...register('avatar', { required: true })}
+                          onChange={uploadImg}
                         // defaultValue={employer.avatar ?? ""} 
                         />
                         <label className="custom-file-label" htmlFor="customFile">

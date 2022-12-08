@@ -43,6 +43,7 @@ const items: MenuItem[] = [
   ]),
   getItem("Tài khoản", "sub1", <UserOutlined />, [
     getItem(<Link to={"profile"}>Tài khoản của bạn</Link>, "8"),
+    getItem(<Link to={"profileCompany"}>Thông tin công ty</Link>, "123"),
     getItem("Bill", "6"),
     getItem("Alex", "7"),
   ]),

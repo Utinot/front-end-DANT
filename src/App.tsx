@@ -23,6 +23,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import moment from 'moment';
 import Package from "./pages/Admin/user/Package";
 import ProfileCompany from "./pages/Admin/user/ProfileCompany";
+import Test from "./pages/Test";
+
 moment.locale('vi');
 
 function App() {
@@ -44,6 +46,7 @@ function App() {
           {/* Default-Layout */}
           <Route path="/" element={<DefaultLayout />}>
             <Route index element={<Home />} />
+            <Route path="test" element={<Test />} />
             <Route path="home" element={<Home />} />
             <Route path="viec-lam-:title-:id" element={<Detail />} />
             <Route path="search" element={<Search />} />

@@ -35,6 +35,8 @@ const ProfileCompany = (props: Props) => {
     const onupdateCom: SubmitHandler<any> = async (dataform: any) => {
         const formData = new FormData();
         formData.append("file", avatar);
+        console.log(avatar);
+        
         formData.append("upload_preset", "dtertjeta");
         const {
             data: { url },
@@ -47,6 +49,8 @@ const ProfileCompany = (props: Props) => {
             logo: url,
         };
         await updateProfilecom(data.id, product)
+        console.log(product);
+        
     }
 
     const uploadImg = async (e: any) => {
@@ -148,7 +152,7 @@ const ProfileCompany = (props: Props) => {
                                         <input
                                             type="file"
                                             className="custom-file-input"
-                                            {...register('logo', { required: true })}
+                                            // {...register('logo', { required: true })}
                                             onChange={uploadImg}
                                         />
                                         <label className="custom-file-label" htmlFor="customFile">

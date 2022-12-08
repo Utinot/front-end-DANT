@@ -30,29 +30,31 @@ const PostAdd = (props: Props) => {
 
   const getCategories = async () => {
     const { data } = await listNews();
-    setCategories(data);  
+    setCategories(data);
   };
 
   const oncreate: SubmitHandler<any> = async (dataform: any) => {
-    // const formData = new FormData();
-    // formData.append("file", avatar);
-    // formData.append("upload_preset", "dtertjeta");
-    // const {
-    //   data: { url },
-    // } = await axios.post(
-    //   `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
-    //   formData
-    // );
-    // const product = {
-    //   ...dataform,
-    //   logo: url,
-    // };
-    const { data } = await createNews(dataform);
+    const formData = new FormData();
+    formData.append("file", avatar);
+    formData.append("upload_preset", "dtertjeta");
+    const {
+      data: { url },
+    } = await axios.post(
+      `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
+      formData
+    );
+    const product = {
+      ...dataform,
+      logo: url,
+    };
+    const { data } = await createNews(product);
+    console.log(product);
+    
   };
 
-  // const uploadImg = async (e: any) => {
-  //   setAvatar(e.target.files[0]);
-  // };
+  const uploadImg = async (e: any) => {
+    setAvatar(e.target.files[0]);
+  };
 
   console.log(categories);
 
@@ -64,7 +66,6 @@ const PostAdd = (props: Props) => {
           onSubmit={handleSubmit(oncreate)}
         >
           {/* new form create employer */}
-
           <div className="card-create-employer">
             <div className="card">
               <div className="card-header">
@@ -85,7 +86,7 @@ const PostAdd = (props: Props) => {
                       <label className="form-label">Giới tính<span className="required-lable">*</span></label>
                       <select className="form-control" required aria-label="select example"  {...register("sex", { required: true })}>
                         <option value="">chọn giới tính</option>
-                        <option value="0">không yêu cầu giới tính</option>
+                        <option value="không yêu cầu">không yêu cầu giới tính</option>
                         <option value="nam">Nam</option>
                         <option value="nữ">Nữ</option>
                       </select>
@@ -129,9 +130,17 @@ const PostAdd = (props: Props) => {
                   </div>
                   <div className="col-6">
                     <div className="mb-4">
+                      <label className="form-label">Chọn nghành nghề<span className="required-lable">*</span></label>
+                      <select className="form-control" required aria-label="select example" {...register("majors_id", { required: true, })}>
+                        {categories.majors?.map((item: any) => (
+                          <option key={item.id} value={item.id}>{item.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="mb-4">
                       <label className="form-label">Chọn chuyên ngành<span className="required-lable">*</span></label>
                       <select className="form-control" required aria-label="select example" {...register("profession_id", { required: true, })}>
-                        {categories.majors?.map((item: any) => (
+                        {categories.profession?.map((item: any) => (
                           <option key={item.id} value={item.id}>{item.name}</option>
                         ))}
                       </select>
@@ -190,10 +199,10 @@ const PostAdd = (props: Props) => {
                         </label>
                       </div>
                     </div>
-                    {/* <div>
+                    <div>
                       <div>logo</div>
                       <input type="file" className="form-control" onChange={uploadImg} />
-                    </div> */}
+                    </div>
                   </div>
                 </div>
                 <div className="rec-submit">

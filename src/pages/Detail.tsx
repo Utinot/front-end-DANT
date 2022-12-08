@@ -1,26 +1,13 @@
-import { FileJpgOutlined, LaptopOutlined, LoadingOutlined, ManOutlined, PoundOutlined, StarOutlined, TeamOutlined, TrophyOutlined } from "@ant-design/icons";
+import { CloseOutlined, ExclamationCircleOutlined, FileJpgOutlined, ImportOutlined, LaptopOutlined, LoadingOutlined, ManOutlined, PoundOutlined, StarOutlined, TeamOutlined, ToTopOutlined, TrophyOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { id } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Outlet, useParams } from "react-router-dom";
-import { defaultAriaLiveMessages } from "react-select/dist/declarations/src/accessibility";
-import { createNews, detailCan } from "../api/home";
-import { updateProfilecom } from "../api/profile";
-
+import { useParams } from "react-router-dom";
+import { detailCan } from "../api/home";
 type Props = {};
 
 const Detail = (props: Props) => {
   const [getJob, setGetjob] = useState<any>([])
-  const [avatar, setAvatar] = useState("");
   const { id } = useParams();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<any>({});
-
   useEffect(() => {
     getData(id);
   }, []);
@@ -31,33 +18,32 @@ const Detail = (props: Props) => {
   };
   const detailJob = getJob.job?.[0]
 
-  const onupdateCom: SubmitHandler<any> = async (dataform: any) => {
+  const [selectedFile, setSelectedFile] = React.useState<any>(null);
+  const [test, check] = React.useState<any>(null);
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault()
     const formData = new FormData();
-    formData.append("file", avatar);
-    formData.append("upload_preset", "dtertjeta");
-    const {
-      data: { url },
-    } = await axios.post(
-      `https://api.cloudinary.com/v1_1/dtertjeta/image/upload`,
-      formData
-    );
-    const product = {
-      ...dataform,
-      logo: url,
-    };
-    const { data } = await createNews(product)
-    console.log(product);
-    
+    if (test == 1) {
+      formData.append("selectedFile", selectedFile);
+    }
+    const { data } = await axios({
+      method: "POST",
+      url: "http://192.168.1.43:8080/api/seeker/upload-cv",
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   }
 
-  const uploadImg = async (e: any) => {
-    setAvatar(e.target.files[0]);
-  };
-
-  console.log(detailJob);
-
-  console.log(getJob.relate?.[0][0].getskill);
-
+  const handleFileSelect = (event: any) => {
+    setSelectedFile(event.target.files[0])
+  }
+  const defaultCv = (event: any) => {
+    check(2);
+  }
+  const uploadCv = (event: any) => {
+    check(1)
+  }
   return (
     <div>
       <section className="bg-light py-5 position-relative">
@@ -421,79 +407,108 @@ const Detail = (props: Props) => {
         </div>
       </section>
       {/* modal */}
-      <form onSubmit={handleSubmit(onupdateCom)}>
-        <div>
-          <div className="modal fade" id="exampleModal1" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLabel">Ứng tuyển {detailJob?.title}</h5>
-                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <div className="modal-body">
-                    <div id="old-apply" style={{ display: 'none' }}>
-                      <div className="row">
-                        <div className="col-sm-8"><p><strong>Sử dụng CV đã ứng tuyển</strong></p></div>
-                        <div className="col-sm-4 text-right"><a href="#" className="btn btn-default btn-sm" id="btn-new-apply"><i className="fa fa-pencil" /> Thay đổi</a></div>
-                      </div>
-                      <div style={{ marginTop: 8, border: '1px dashed #ccc', padding: '5px 10px' }}>
-                        <table>
-                          <tbody><tr>
-                            <th>CV</th>
-                            <td style={{ paddingLeft: 5 }}>: <a href="https://www.topcv.vn/cv-ung-tuyen/20a915c43f91a8e2b0e9d92c00783064/VQRtZmFfDy5XZHh0PDU0IgAnJE" target="blank" className="text-highlight">Đăng ký thực tập front-end <small><i>(Click để xem)</i></small></a></td>
-                          </tr>
-                          </tbody></table>
-                        <input type="hidden" name="last_apply_id" />
-                      </div>
-                    </div>
-                    <div id="new-apply" style={{ display: 'block' }}>
-                      <div id="frm-select-cv-online">
-                        <div className="text-right" style={{ marginBottom: 10 }}>
-                          {/* <a href="#" className="btn-sm btn btn-default btn-old-apply"><i className="fa fa-undo" /> Dùng CV đã nộp</a> */}
-                          <div className="custom-file">
-                            <input type="file" className="custom-file-input"
-                              {...register('logo', { required: true })}
-                              onChange={uploadImg}
-                            />
-                            <label className="custom-file-label" htmlFor="customFile">
-                              <i className="fa fa-user" />Tải Cv Lên
-                            </label>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-xs-6">
-                            <label>Chọn CV đã tải lên: <span className="italic text-primary text-small"><i className="fa fa-thumbs-o-up" /> Khuyên dùng</span></label>
+
+
+      <div className="modal fade" id="exampleModal1" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">Ứng Tuyền {detailJob?.title}</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><CloseOutlined /></span>
+              </button>
+            </div>
+            <div className="text-right mt-2">
+              <a href="#" className="btn btn-default mr-2 btn-custom-cv" onClick={defaultCv}><ImportOutlined /> Dùng CV đã nộp</a>
+              <a href="#" className="btn btn-default mr-2 btn-custom-cv" onClick={uploadCv}><ToTopOutlined /> Tải lên CV từ máy tính</a>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleSubmit}>
+                <div className="" id="new-apply" style={{ display: 'block', top: 0 }}>
+                  <div id="frm-select-cv-online" >
+                    <div className="p-3 rounded mx-auto d-block  ">
+                      <div className="col-xs-6" style={{ top: 0 }}>
+                        {test == 1 ? (
+                          <>
+                            <div className="float-left mt-custom-modal" style={{ marginLeft: 10 }}>
+                              <strong className="input-label text-dark-gray">Tải lên CV từ máy tính</strong><br />
+                              <span className="text-gray text-small">File doc, docx, pdf. Tối đa 5MB.</span>
+                            </div>
+                            <div className="float-left p-2" >
+
+                              {/* <label className="form-label">Multiple files input example</label> */}
+                              <input style={{ marginBottom: 30 }} type="file" id="input-b1" name="input-b1" className="form-control" data-browse-on-zone-click="true" multiple
+                                onChange={handleFileSelect}
+                              />
+                              <div className="col-xs-12">
+                                <div className="form-group align-center">
+                                  <input type="checkbox" name="save_cv" className="checkbok" /><span className="switchery switchery-small switchery-default" style={{ boxShadow: 'rgb(223, 223, 223) 0px 0px 0px 0px inset', borderColor: 'rgb(223, 223, 223)', backgroundColor: 'rgb(255, 255, 255)', transition: 'border 0.4s ease 0s, box-shadow 0.4s ease 0s' }}><small style={{ left: 0, transition: 'background-color 0.4s ease 0s, left 0.2s ease 0s' }} /></span>
+                                  <span style={{ marginLeft: 10 }}>Lưu CV (Dùng để quản lý trong <a target="_blank" className="text-highlight" href="">Hồ Sơ CV</a> và giúp nhà tuyển dụng tiếp cận bạn)</span>
+                                </div>
+                              </div>
+                            </div>
+
+                          </>
+                        ) :
+                          <div className="float-left">
+                            <label><span className="custom-text">Chọn Cv Đã Tải Lên</span>: <span className="italic text-primary text-small"><i className="fa fa-thumbs-o-up" /> Khuyên Dùng</span></label>
                             <ul className="cv-choosen">
-                              <li className="radio-choose-active">
-                                <input id="apply-cv-f37d8a03bd44a418a363c6f77465db2c" type="radio" name="cvid" defaultValue="f37d8a03bd44a418a363c6f77465db2c" defaultChecked />
-                                <label htmlFor="apply-cv-f37d8a03bd44a418a363c6f77465db2c"> Đăng ký thực tập front-end <a className="text-highlight" target="_blank" href="https://www.topcv.vn/xem-cv/VQYCXVtVUwdaBlJSUQIEWlkAVFVbAVIGBFBTBwdb2c">(Xem)</a></label>
+                              <li className='radio-choose-active float-left'>
+                                <input type="radio" id="html" name="fav_language" defaultValue="HTML" />
+                                <label htmlFor="html">Đăng ký<a className="text-highlight" target="_blank" href="https://www.topcv.vn/xem-cv/VQYCXVtVUwdaBlJSUQIEWlkAVFVbAVIGBFBTBwdb2c">(Xem)</a></label><br />
                               </li>
+                              <li className='radio-choose-active'>
+                                <input type="radio" id="css" name="fav_language" defaultValue="CSS" />
+                                <label htmlFor="css">Đăng ký thực tập front-end<a className="text-highlight" target="_blank" href="https://www.topcv.vn/xem-cv/VQYCXVtVUwdaBlJSUQIEWlkAVFVbAVIGBFBTBwdb2c">(Xem)</a></label><br />
+                              </li>
+                              <li className='radio-choose-active'>
+                                <input type="radio" id="javascript" name="fav_language" defaultValue="JavaScript" />
+                                <label htmlFor="javascript">Đăng ký thực tập front-end<a className="text-highlight" target="_blank" href="https://www.topcv.vn/xem-cv/VQYCXVtVUwdaBlJSUQIEWlkAVFVbAVIGBFBTBwdb2c">(Xem)</a></label></li>
+
+
+
                             </ul>
+
+
                           </div>
-                          <div className="col-xs-6">
+                        }
+                        <div className="float-left">
+                          <div className="modal-footer">
+                            <button type="submit" className="btn btn-success text-white" >Tải CV</button>
                           </div>
+                          <ul className="cv-choosen justify-content-center border" style={{ padding: 10 }}>
+                            <li className="w-100">
+                              <div className="text-left">
+                                <ExclamationCircleOutlined className="fa-solid fa-triangle-exclamation" style={{ color: "red" }} /> Lưu ý: <br /><br />
+                                <p><span className="text-danger">1.</span> Ứng viên nên lựa chọn ứng tuyển bằng CV Online &amp; viết thêm mong muốn tại phần thư giới thiệu để được Nhà tuyển dụng xem CV sớm hơn.</p>
+                                <p><span className="text-danger">2.</span> Để có trải nghiệm tốt nhất, bạn nên sử dụng các trình duyệt phổ biến như Google Chrome hoặc Firefox.</p>
+                                <p className="text-red"><span className="text-danger">3.</span> Trước tình trạng gia tăng các hình thức lừa đảo việc làm trên internet được các cơ quan chức năng cảnh báo, TopCV xin lưu ý bạn một số dấu hiệu lừa đảo việc làm như sau:
+                                </p>
+
+                              </div>
+                            </li>
+                          </ul>
+
                         </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" className="btn btn-primary" >Save changes</button>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
-      </form>
+      </div >
+
+
+
+
+
+
 
       {/* end modal */}
       {/* ============================ Job Details End ================================== */}
-    </div>
+    </div >
   );
 };
 

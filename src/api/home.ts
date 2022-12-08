@@ -9,7 +9,7 @@ export const listCandidate = () => {
 };
 
 export const detailCan = (id: any) => {
-  const url = `employer/detail/${id}`;  
+  const url = `employer/detail/${id}`;
   return instance.get(url);
 };
 
@@ -33,21 +33,28 @@ export const listNews = () => {
   return instance.get(url);
 };
 
+// export const createNews = (data: any) => {
+//   const url = `/employer/store`;
+//   return instance.post(url, data);
+// };
+
 export const createNews = (data: any) => {
-  console.log(data);
-  const url = `/employer/store`;
-  return instance.post(url, data);
-  
-};
+  return instance.post(`/employer/store`, data, {
+    headers: {
+      Authorization: `Bearer ${dataAuth.token}`
+    }
+  });
+}
+
 
 export const listNewsemp = () => {
   const url = `/employer/index/${dataAuth.token}`;
   return instance.get(url);
 };
- export const searchJob = () => {
+export const searchJob = () => {
   const url = `/index/keyword`;
   return instance.get(url);
- };
+};
 
 
 // export const updateNews = (id: any) => {
@@ -59,3 +66,11 @@ export const editNews = (id: any) => {
   const url = `/employer/edit/${id}`;
   return instance.get(url);
 };
+export const ListCv = () => {
+  const url = `/employer/cv/index`
+  return instance.get(url, {
+    headers: {
+      Authorization: `Bearer ${dataAuth.token}`
+    }
+  });
+}

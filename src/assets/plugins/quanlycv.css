@@ -8,3 +8,6 @@
 .d-block1 {
     width: 440px;
 }
+.border-2{
+    border: 2px solid #ccc !important;
+}

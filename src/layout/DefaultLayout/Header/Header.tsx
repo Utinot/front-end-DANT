@@ -115,7 +115,7 @@ const Header = (props: Props) => {
                       <div className="nav-item row nav-menu-social align-to-right">
                         <div className="nav-item">
                           <button
-                            className="btn btn-success bg-white"
+                            className="btn btn-success text-white"
                             data-toggle="modal"
                             data-target="#login"
                           >
@@ -124,7 +124,7 @@ const Header = (props: Props) => {
                         </div>
                         <div className="nav-item">
                           <button
-                            className="btn btn-primary"
+                            className="btn text-primary"
                             data-toggle="modal"
                             data-target="#exampleModal"
                           >
@@ -279,7 +279,7 @@ const Header = (props: Props) => {
                     <li className="nav-item d-flex align-items-center ">
                       <div className="nav-item">
                         <a
-                          className="btn btn-success"
+                          className="btn btn-success text-white"
                           data-toggle="modal"
                           data-target="#login"
                         >
@@ -292,7 +292,7 @@ const Header = (props: Props) => {
                     <li className="nav-item d-flex align-items-center col-sm-4">
                       <div className="nav-item ">
                         <a
-                          className="btn btn-primary"
+                          className="btn btn-primary text-white"
                           data-toggle="modal"
                           data-target="#exampleModal"
                         >
@@ -319,8 +319,8 @@ const Header = (props: Props) => {
           aria-labelledby="loginmodal"
           aria-hidden="true"
         >
-          <div className="modal-dialog row " role="document">
-            <div className="modal-content mx-auto row" id="loginmodal">
+          <div className="modal-dialog col-sm-4 " role="document">
+            <div className="modal-content mx-auto col-sm-4" id="loginmodal">
               <div className="modal-headers">
                 <button
                   type="button"
@@ -401,19 +401,19 @@ const Header = (props: Props) => {
       {/* End Modal */}
 
       {/* modal đăng ký */}
-      <div>
+      <div className="container">
         {/* Modal */}
         <div
-          className="modal fade"
+          className="modal fade "
           id="exampleModal"
           tabIndex={-1}
           role="dialog"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
-          <div className="modal-dialog row mx-auto" role="document">
-            <div className="modal-content mx-auto d-block">
-              <div className="modal-header">
+          <div className="modal-dialog  mx-auto w-50   " role="document">
+            <div className="modal-content row p-5 ">
+              <div className="modal-header ">
                 <h5 className="modal-title" id="exampleModalLabel">
                   Chào bạn,
                   <div>
@@ -461,6 +461,7 @@ const Header = (props: Props) => {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
