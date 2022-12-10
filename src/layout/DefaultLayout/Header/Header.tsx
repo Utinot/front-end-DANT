@@ -251,13 +251,14 @@ const Header = (props: Props) => {
                       >
                         <UserSwitchOutlined /> Thông tin
                       </Link>
-                      <a
+                      <Link
+                        to={`/cv`}
                         className="dropdown-item"
                         data-toggle="modal"
                         data-target=""
                       >
-                        <FileAddFilled /> Job của bạn
-                      </a>
+                        <FileAddFilled /> Cv của bạn
+                      </Link>
                       <a
                         className="dropdown-item"
                         data-toggle="modal"
@@ -328,7 +329,7 @@ const Header = (props: Props) => {
                   data-dismiss="modal"
                   aria-label="Close"
                 >
-                  <CloseOutlined  className="ti-close" />
+                  <CloseOutlined className="ti-close" />
                 </button>
               </div>
               <div className="p-5 rounded mx-auto d-block icofont-cop-badge-pill w-100 ">
@@ -466,6 +467,7 @@ const Header = (props: Props) => {
         </div>
       </div>
       {/* end modal đăng ký */}
+      <hr />
     </div>
   );
 };

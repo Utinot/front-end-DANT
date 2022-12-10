@@ -24,6 +24,7 @@ import moment from 'moment';
 import Package from "./pages/Admin/user/Package";
 import ProfileCompany from "./pages/Admin/user/ProfileCompany";
 import Test from "./pages/Test";
+import Cv from "./pages/candidate/Profile/Cv";
 
 moment.locale('vi');
 
@@ -73,6 +74,7 @@ function App() {
             path="/login/signupcandidate"
             element={<Signupcandidate />}
           />
+          <Route path="/cv" element={<Cv />} />
           <Route path="/login/signupempoly" element={<Signupemployer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Pickpassword" element={<Pickpassword />} />
