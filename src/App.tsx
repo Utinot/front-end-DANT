@@ -56,7 +56,7 @@ function App() {
             <Route path="contact" element={<Contact />} />
           </Route>
           {/* Admin-Layout */}
-          <Route path="admin" element={<PrivteRoute> <AdminLayout /> </PrivteRoute>}>
+          <Route path="admin" element={<AdminLayout /> }>
             <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<ProfileAdmin />} />
